@@ -277,7 +277,7 @@ If you come across any problems at all, or have ideas for improvements, please f
 
 ## TODO
 
-- I seem to have completed all the TODO's I originally had! If you think of any that need adding, let me know 🤘
+- add storing in db options in the config.yaml
 
 ## Example output
 
