@@ -270,14 +270,14 @@ NOTE: You can't pipe in a Burp, ZAP or Caido file, these must be passed using `-
   - All valid words will also have the singular/plural version added to the wordlist if possible.
   - If the original word has any upper case characters, a lower case version will also be added
 - If the default "Stop Words" for a target specific wordlist are not good enough, either change in the YML config file, or provide additional stop words using the `-swf`/`--stopwords-file` option. You may want to include stop words in another language, depending on the target. Stop words are used in Natural Language Processing (NLP) and many stop word lists can be found online to suit different needs.
-
+- when using `-re` mode try making it work in the background using `nohup <your command> </dev/null >/dev/null 2>&1 &` it will not be Killed! Except when memory is full for sure
 ## Issues
 
 If you come across any problems at all, or have ideas for improvements, please feel free to raise an issue on Github. If there is a problem, it will be useful if you can provide the exact command you ran and a detailed description of the problem. If possible, run with `-vv` to reproduce the problem and let me know about any error messages that are given.
 
 ## TODO
 
-- add storing in db options in the config.yaml
+- I seem to have completed all the TODO's I originally had! If you think of any that need adding, let me know 🤘
 
 ## Example output
 

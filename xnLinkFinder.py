@@ -3,6 +3,7 @@
 
 # Good luck and good hunting! If you really love the tool (or any others), or they helped you find an awesome bounty, consider BUYING ME A COFFEE! (https://ko-fi.com/xnlh4ck3r) ☕ (I could use the caffeine!)
 
+first_time = False
 collection = None
 doc_id = None
 sendTelegramNotification = None
@@ -279,9 +280,8 @@ def vverbose():
 def storeindb():
     return args.store_results
 def connectTomongoDB(target_name):
-    global collection, client, db, doc_id
+    global collection, client, db, doc_id, first_time
     hostname = 'localhost'
-    # port = 27017
     if isinstance(args.mongo_port, int):
         port = args.mongo_port
     else:
@@ -290,7 +290,6 @@ def connectTomongoDB(target_name):
         client = MongoClient(f'mongodb://{hostname}:{port}/')
     except Exception as e:
         writerr(colored("ERROR: Could not connect to MongoDB " + str(e), "red"))
-        # writerr(colored("ERROR: Please check that MongoDB is running, ", "red"))
         exit(1)
     db_name = 'bug-hunting'
     if db_name not in client.list_database_names():
@@ -301,18 +300,16 @@ def connectTomongoDB(target_name):
         db = client[db_name]
 
     collection_name = 'xnLinkFinder'
-    if collection_name not in db.list_collection_names():
-        collection = db[collection_name]
-    else:
-        collection = db[collection_name]
+    collection = db[collection_name]
 
-    existing_doc = collection.find_one({"target_name": f'{target_name}'})    
-    # query = {f'{target_name}': {'$exists': True}}
-    document = collection.find_one(existing_doc)
+    # Change this line to find the document with the given target_name
+    document = collection.find_one({"target_name": target_name})
+
     if document is None:
         sample_document = {"target_name": f'{target_name}', "endpoints": []}
         insert_sample = collection.insert_one(sample_document)
         doc_id = insert_sample.inserted_id
+        first_time = True
     else:
         doc_id = document['_id']
 
@@ -348,6 +345,7 @@ def send_discord_message(webhook_url, text):
         writerr(f'Error sending message to Discord: {response.status_code}, {response.text}')
 def check_and_send_to_db(target_name,url):
     # A document with the target_name field exists, update the document with the new unique url
+    global collection, client, db, doc_id, first_time
     query = {'_id': doc_id}
     document = collection.find_one(query)
     # print(document)
@@ -363,12 +361,13 @@ def check_and_send_to_db(target_name,url):
             )
 
             # Check if the url is in the target_name array
-            if sendDiscordNotification:
-                send_discord_message(args.discord_webhook, f'Url "{url}" has been added to {target_name}')
-            if sendTelegramNotification:
-                send_telegram_message(args.telegram_token, args.telegram_chat_id, f'Url "{url}"has been added to {target_name}')
-            if verbose():
-                writerr(colored(f'INFO: Url "{url}" has been added to {target_name} database', 'yellow'))
+            if first_time != True:
+                if sendDiscordNotification:
+                    send_discord_message(args.discord_webhook, f'Url "{url}" has been added to {target_name}')
+                if sendTelegramNotification:
+                    send_telegram_message(args.telegram_token, args.telegram_chat_id, f'Url "{url}"has been added to {target_name}')
+                if verbose():
+                    writerr(colored(f'INFO: Url "{url}" has been added to {target_name} database', 'yellow'))
  
     # else:
     #     # Element already exists, do nothing
@@ -1283,6 +1282,7 @@ def processLinkOutput():
         # Go through all links, and output what was found
         # If the -ra --regex-after was passed then only output if it matches
         outputCount = 0
+        connectTomongoDB(target_name)
         for link in linksFound:
             # Remove the prefix tag if it has one
             if not args.prefixed:
@@ -3772,7 +3772,7 @@ def main():
             writerr(colored("ERROR main 1: " + str(e), "red"))
 # Run xnLinkFinder
 if __name__ == "__main__":
-
+    
     # Tell Python to run the handler() function when SIGINT is received
     signal(SIGINT, handler)
 
@@ -4100,7 +4100,7 @@ if __name__ == "__main__":
     except:
         pass
     
-    connectTomongoDB(target_name)
+    
     while True:
         main()
         if run_every != None and run_every > 0:
