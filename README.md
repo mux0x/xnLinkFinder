@@ -198,6 +198,14 @@ python3 xnLinkFinder.py -i ~/Tools/waymore/results/target.com
 
 NOTE: It is passed as a normal directory, but xnLinkFinder will determine it is a waymore results directory and process respectively. This relies on the default naming convention of the URLs file being `waymore.txt` and that file being in the same directory as the archived files (which it is by default).
 
+### Empower your finding by storing results in db and check for daily changes
+
+This features allows you to store the output in a mongodb Database, you have to use `-sr` to allow storing results, then `-tn` with name of your target to store in db e.g. `redbull`, then you can add -re flag provided with n of hours to make the script runs forever, and scans every n hours, and for sure it can send you notification to discord using -dw flag webhook_url and telegram -tt for telegram bot token and -tc for telegram chatid
+
+```
+python3.7 xnLinkFinder.py -i redbull.com -sp https://redbull.com -sf redbull.* -d 3 -vv -re 12 -dw https://discord.com/api/webhooks/xxxxxx/xxxxxx -sr -tn redbull
+```
+
 ### Piping to other Tools
 
 You can pipe xnLinkFinder to other tools. Any errors are sent to `stderr` and any links found are sent to `stdout`. The output file is still created in addition to the links being piped to the next program. However, potential parameters are not piped to the next program, but they are still written to file. For example:
