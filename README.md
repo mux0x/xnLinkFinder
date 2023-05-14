@@ -291,6 +291,10 @@ Piped input and output:
 
 <center><img src="https://github.com/xnl-h4ck3r/xnLinkFinder/blob/main/xnLinkFinder/images/example2.png"></center>
 
+Using store results mode:
+<center><img src="https://raw.githubusercontent.com/mux0x/xnLinkFinder/main/xnLinkFinder/images/xterminal.png"></center>
+<center><img src="https://raw.githubusercontent.com/mux0x/xnLinkFinder/main/xnLinkFinder/images/Screenshot%202023-05-14%20at%202.59.31%20PM.png"></center>
+<center><img src="https://github.com/mux0x/xnLinkFinder/blob/main/xnLinkFinder/images/mongodb.png?raw=true"></center>
 Good luck and good hunting!
 If you really love the tool (or any others), or they helped you find an awesome bounty, consider [BUYING ME A COFFEE!](https://ko-fi.com/xnlh4ck3r) ☕ (I could use the caffeine!)
 
